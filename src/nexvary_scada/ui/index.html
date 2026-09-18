@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEXVARY SCADA</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="mark">N</span><div><strong>NEXVARY SCADA</strong><small>Industrial Monitoring &amp; Control Platform</small></div></div>
+    <div class="status"><span class="dot"></span><span id="driver">Connecting…</span><span class="mode">SIMULATION</span></div>
+  </header>
+  <div class="shell">
+    <nav class="sidebar">
+      <button class="nav active">Overview</button><button class="nav">HMI</button><button class="nav">Devices</button>
+      <button class="nav">Alarms</button><button class="nav">Historian</button><button class="nav">Trends</button>
+      <button class="nav">Maintenance</button><button class="nav">Reports</button><button class="nav">Settings</button>
+      <div class="scope">Nuclear profile<br><b>Non-safety monitoring only</b></div>
+    </nav>
+    <main>
+      <section class="hero">
+        <div><p class="eyebrow">PLANT / DEMO PROCESS</p><h1>Operations Overview</h1><p>Live process simulation through the same runtime used by field protocol drivers.</p></div>
+        <div class="alarm-count"><span id="alarm-count">0</span><small>ACTIVE ALARMS</small></div>
+      </section>
+      <section id="cards" class="cards"></section>
+      <section class="grid">
+        <div class="panel mimic">
+          <div class="panel-title"><span>PROCESS MIMIC</span><span class="live">LIVE</span></div>
+          <div class="process">
+            <div class="tank"><div id="tank-fill" class="tank-fill"></div><span>T-101</span></div>
+            <div class="pipe"></div>
+            <div id="pump" class="pump">P-101</div>
+            <div class="pipe"></div>
+            <div class="outlet">PROCESS</div>
+          </div>
+          <div class="controls"><button id="toggle-pump">START / STOP PUMP</button><button id="fault-pump" class="danger">TOGGLE FAULT</button><button id="estop" class="danger">E-STOP</button></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title"><span>ALARM CONSOLE</span><span>PRIORITY</span></div>
+          <div id="alarms" class="alarms"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
