@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 class Quality(str, Enum):
@@ -39,6 +39,8 @@ class TagDefinition:
     unit: str = ""
     writable: bool = False
     description: str = ""
+    device_id: str = "simulator-01"
+    source: str = "simulation"
 
 
 @dataclass(slots=True)
@@ -47,6 +49,17 @@ class TagValue:
     value: Any
     quality: Quality = Quality.GOOD
     timestamp: datetime = field(default_factory=utcnow)
+    device_id: str = "simulator-01"
+
+
+@dataclass(slots=True)
+class DeviceDefinition:
+    id: str
+    name: str
+    driver: str
+    enabled: bool = True
+    writes_enabled: bool = False
+    description: str = ""
 
 
 @dataclass(slots=True)
@@ -69,3 +82,6 @@ class AlarmEvent:
     value: Any
     raised_at: datetime
     changed_at: datetime
+    acknowledged: bool = False
+    acknowledged_by: str | None = None
+    acknowledged_at: datetime | None = None

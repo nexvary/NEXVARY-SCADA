@@ -1,0 +1,28 @@
+{
+  "include_simulator": true,
+  "devices": [
+    {
+      "id": "energy-meter-01",
+      "name": "RS-485 Energy Meter",
+      "driver": "modbus_rtu",
+      "port": "COM3",
+      "baudrate": 9600,
+      "parity": "N",
+      "stopbits": 1,
+      "unit_id": 1,
+      "timeout": 1.0,
+      "writes_enabled": false,
+      "tags": [
+        {
+          "id": "meter_voltage",
+          "name": "Line Voltage",
+          "register": "input_register",
+          "address": 0,
+          "data_type": "float_scaled",
+          "scale": 0.1,
+          "unit": "V"
+        }
+      ]
+    }
+  ]
+}
