@@ -4,7 +4,7 @@ import math
 from dataclasses import dataclass
 
 from nexvary_scada.drivers.base import DriverError, IndustrialDriver
-from nexvary_scada.models import TagDefinition, TagValue
+from nexvary_scada.models import DeviceDefinition, TagDefinition, TagValue
 
 
 @dataclass(slots=True)
@@ -19,6 +19,13 @@ class ProcessSimulator(IndustrialDriver):
     name = "Process Simulator"
 
     def __init__(self) -> None:
+        self.device = DeviceDefinition(
+            id="simulator-01",
+            name="Demo Process",
+            driver="simulator",
+            writes_enabled=True,
+            description="Built-in deterministic process simulator",
+        )
         self.state = _SimState()
         self._definitions = [
             TagDefinition("pump_01_run", "Pump 01 Running", writable=True),

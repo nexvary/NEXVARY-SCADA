@@ -1,0 +1,33 @@
+{
+  "include_simulator": true,
+  "devices": [
+    {
+      "id": "plc-01",
+      "name": "Boiler PLC",
+      "driver": "modbus_tcp",
+      "host": "192.168.10.20",
+      "port": 502,
+      "unit_id": 1,
+      "timeout": 2.0,
+      "writes_enabled": false,
+      "tags": [
+        {
+          "id": "boiler_temperature",
+          "name": "Boiler Temperature",
+          "register": "holding_register",
+          "address": 0,
+          "data_type": "float_scaled",
+          "scale": 0.1,
+          "unit": "°C"
+        },
+        {
+          "id": "boiler_running",
+          "name": "Boiler Running",
+          "register": "coil",
+          "address": 0,
+          "writable": false
+        }
+      ]
+    }
+  ]
+}

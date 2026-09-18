@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nexvary-scada"
-version = "0.1.0"
+version = "0.2.0"
 description = "NEXVARY SCADA - Industrial Monitoring & Control Platform"
 requires-python = ">=3.11"
 dependencies = [
@@ -14,6 +14,12 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10", "httpx>=0.27,<1"]
+industrial = [
+  "pyserial>=3.5,<4",
+  "paho-mqtt>=2,<3",
+  "asyncua>=1.1,<2",
+]
+packaging = ["pyinstaller>=6,<7"]
 
 [project.scripts]
 nexvary-scada = "nexvary_scada.api:main"
