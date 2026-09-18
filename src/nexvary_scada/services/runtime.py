@@ -10,7 +10,6 @@ from nexvary_scada.services.audit import AuditLog
 from nexvary_scada.services.devices import DeviceManager
 from nexvary_scada.services.historian import Historian
 
-
 DEFAULT_RULES = [
     AlarmRule("pump-fault", "pump_01_fault", Compare.EQ, True, Severity.CRITICAL, "Pump 01 fault detected"),
     AlarmRule("e-stop", "emergency_stop", Compare.EQ, True, Severity.CRITICAL, "Emergency stop is active"),
