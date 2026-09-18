@@ -168,3 +168,18 @@ async function refreshPresentation(){
   }catch(error){console.error("Presentation data:",error)}
 }
 refreshPresentation();setInterval(refreshPresentation,4000);
+
+const presentationToggle=$("presentation-toggle");
+if(presentationToggle){
+  presentationToggle.onclick=()=>{
+    document.body.classList.toggle("presentation-mode");
+    const active=document.body.classList.contains("presentation-mode");
+    presentationToggle.textContent=active?"EXIT PRESENTATION":"PRESENTATION MODE";
+  };
+}
+document.addEventListener("keydown",event=>{
+  if(event.key.toLowerCase()==="p" && !event.ctrlKey && !event.metaKey && !event.altKey){
+    const target=event.target?.tagName?.toLowerCase();
+    if(target!=="input" && target!=="select" && target!=="textarea")presentationToggle?.click();
+  }
+});

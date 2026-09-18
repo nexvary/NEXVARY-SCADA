@@ -1,8 +1,14 @@
 from __future__ import annotations
 
 import sys
+import threading
+import webbrowser
 
 from nexvary_scada.api import app, main, runtime
+
+
+def _open_executive_view() -> None:
+    webbrowser.open("http://127.0.0.1:8765/#executive", new=1)
 
 
 def run() -> None:
@@ -12,6 +18,9 @@ def run() -> None:
         assert values
         print(f"NEXVARY SCADA executable smoke check OK: {len(values)} tags")
         return
+
+    if "--no-browser" not in sys.argv:
+        threading.Timer(1.2, _open_executive_view).start()
     main()
 
 
