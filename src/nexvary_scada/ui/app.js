@@ -115,20 +115,20 @@ $("trend-tag").onchange=loadTrend;$("trend-window").onchange=loadTrend;
 navigate((location.hash||"#executive").slice(1));refresh();setInterval(refresh,2500);
 
 const executiveLabels={
-  connected_sites:["CONNECTED SITES","sites"],
-  monitored_assets:["MONITORED ASSETS","assets"],
-  asset_health_percent:["ASSET HEALTH","%"],
-  generation_mw:["DEMO GENERATION","MW"],
-  critical_open_alarms:["CRITICAL ALARMS","open"],
-  audit_coverage_percent:["AUDIT COVERAGE","%"]
+  connected_sites:["CONNECTED SITES / المواقع","sites"],
+  monitored_assets:["MONITORED ASSETS / الأصول","assets"],
+  asset_health_percent:["ASSET HEALTH / الجاهزية","%"],
+  generation_mw:["DEMO GENERATION / التوليد","MW"],
+  critical_open_alarms:["CRITICAL ALARMS / الحرجة","open"],
+  audit_coverage_percent:["AUDIT COVERAGE / التدقيق","%"]
 };
 const nuclearLabels={
-  gross_generation_mw:["GROSS GENERATION","MW"],
-  grid_frequency_hz:["GRID FREQUENCY","Hz"],
-  auxiliary_load_mw:["AUXILIARY LOAD","MW"],
-  cooling_water_inlet_c:["COOLING WATER INLET","°C"],
-  systems_available:["SYSTEMS AVAILABLE",""],
-  open_critical_alarms:["CRITICAL ALARMS","open"]
+  gross_generation_mw:["GROSS GENERATION / التوليد","MW"],
+  grid_frequency_hz:["GRID FREQUENCY / التردد","Hz"],
+  auxiliary_load_mw:["AUXILIARY LOAD / الحمل المساعد","MW"],
+  cooling_water_inlet_c:["COOLING WATER / مياه التبريد","°C"],
+  systems_available:["SYSTEMS AVAILABLE / الأنظمة",""],
+  open_critical_alarms:["CRITICAL ALARMS / الحرجة","open"]
 };
 
 function renderKpis(targetId,values,labels){
