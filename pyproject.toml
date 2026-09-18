@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nexvary-scada"
-version = "0.3.0"
+version = "0.4.0"
 description = "NEXVARY SCADA - Industrial Monitoring & Control Platform"
 requires-python = ">=3.11"
 dependencies = [

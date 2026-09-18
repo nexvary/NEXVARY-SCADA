@@ -10,12 +10,13 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from nexvary_scada.drivers.base import DriverError, WriteBlockedError
+from nexvary_scada.services.executive import executive_demo
 from nexvary_scada.services.runtime import ScadaRuntime
 
 PACKAGE_DIR = Path(__file__).resolve().parent
 UI_DIR = PACKAGE_DIR / "ui"
 
-app = FastAPI(title="NEXVARY SCADA", version="0.2.0")
+app = FastAPI(title="NEXVARY SCADA", version="0.4.0")
 runtime = ScadaRuntime()
 app.mount("/static", StaticFiles(directory=UI_DIR), name="static")
 
@@ -55,6 +56,16 @@ def status():
         "real_writes_default": "BLOCKED",
         "nuclear_scope": "NON_SAFETY_MONITORING_SIMULATION_ONLY",
     }
+
+
+@app.get("/api/executive")
+def executive_snapshot():
+    return executive_demo.snapshot()
+
+
+@app.get("/api/nuclear")
+def nuclear_snapshot():
+    return executive_demo.nuclear_snapshot()
 
 
 @app.get("/api/devices")

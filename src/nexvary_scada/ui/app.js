@@ -112,4 +112,74 @@ $("toggle-pump").onclick=()=>writeTag("pump_01_run",!latest.pump_01_run?.value);
 $("fault-pump").onclick=()=>writeTag("pump_01_fault",!latest.pump_01_fault?.value);
 $("estop").onclick=()=>writeTag("emergency_stop",!latest.emergency_stop?.value);
 $("trend-tag").onchange=loadTrend;$("trend-window").onchange=loadTrend;
-navigate((location.hash||"#overview").slice(1));refresh();setInterval(refresh,2500);
+navigate((location.hash||"#executive").slice(1));refresh();setInterval(refresh,2500);
+
+const executiveLabels={
+  connected_sites:["CONNECTED SITES / المواقع","sites"],
+  monitored_assets:["MONITORED ASSETS / الأصول","assets"],
+  asset_health_percent:["ASSET HEALTH / الجاهزية","%"],
+  generation_mw:["DEMO GENERATION / التوليد","MW"],
+  critical_open_alarms:["CRITICAL ALARMS / الحرجة","open"],
+  audit_coverage_percent:["AUDIT COVERAGE / التدقيق","%"]
+};
+const nuclearLabels={
+  gross_generation_mw:["GROSS GENERATION / التوليد","MW"],
+  grid_frequency_hz:["GRID FREQUENCY / التردد","Hz"],
+  auxiliary_load_mw:["AUXILIARY LOAD / الحمل المساعد","MW"],
+  cooling_water_inlet_c:["COOLING WATER / مياه التبريد","°C"],
+  systems_available:["SYSTEMS AVAILABLE / الأنظمة",""],
+  open_critical_alarms:["CRITICAL ALARMS / الحرجة","open"]
+};
+
+function renderKpis(targetId,values,labels){
+  const target=$(targetId);if(!target)return;
+  target.innerHTML=Object.entries(labels).map(([key,label])=>{
+    const value=values[key]??"—";
+    return '<article class="exec-kpi"><small>'+escapeHtml(label[0])+'</small><strong>'+escapeHtml(value)+'</strong><span>'+escapeHtml(label[1])+'</span></article>';
+  }).join("");
+}
+function drawNuclearTrend(values){
+  const canvas=$("nuclear-trend");if(!canvas||!values?.length)return;
+  const ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);ctx.strokeStyle="#223245";ctx.lineWidth=1;
+  for(let i=1;i<5;i++){const y=i*h/5;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+  const min=Math.min(...values),max=Math.max(...values),span=max-min||1;
+  const gradient=ctx.createLinearGradient(0,0,w,0);gradient.addColorStop(0,"#7d49ff");gradient.addColorStop(.5,"#24a8ff");gradient.addColorStop(1,"#d6ad4d");
+  ctx.strokeStyle=gradient;ctx.lineWidth=3;ctx.beginPath();
+  values.forEach((value,i)=>{const x=20+i*((w-40)/(values.length-1)),y=h-28-((value-min)/span)*(h-55);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});
+  ctx.stroke();ctx.fillStyle="#a9b5c2";ctx.font="16px Segoe UI";ctx.fillText("max "+max.toFixed(1)+" MW",16,20);ctx.fillText("min "+min.toFixed(1)+" MW",16,h-8);
+}
+async function refreshPresentation(){
+  try{
+    const [executive,nuclear]=await Promise.all([api("/api/executive"),api("/api/nuclear")]);
+    renderKpis("executive-kpis",executive.headline,executiveLabels);
+    const sectors=$("executive-sectors");
+    if(sectors)sectors.innerHTML=executive.sectors.map(s=>'<article class="sector-card '+escapeHtml(s.accent)+'"><b>'+escapeHtml(s.name)+'</b><small>'+escapeHtml(s.sites)+' connected demo site'+(s.sites===1?"":"s")+'</small><span>'+escapeHtml(s.status)+'</span></article>').join("");
+    const capabilities=$("executive-capabilities");
+    if(capabilities)capabilities.innerHTML=executive.capabilities.map(x=>'<div class="capability-item"><i></i><span>'+escapeHtml(x)+'</span></div>').join("");
+    renderKpis("nuclear-headline",nuclear.headline,nuclearLabels);
+    if($("nuclear-plant-name"))$("nuclear-plant-name").textContent=nuclear.plant;
+    if($("nuclear-scope-notice"))$("nuclear-scope-notice").textContent=nuclear.scope_notice;
+    const units=$("nuclear-units");
+    if(units)units.innerHTML=nuclear.units.map(u=>'<article class="unit-card"><div class="unit-card-head"><b>UNIT '+u.unit+'</b><span>'+escapeHtml(u.status)+'</span></div><div class="unit-power">'+escapeHtml(u.generator_load_mw)+' <small>MW</small></div><div class="unit-meta"><div><small>TURBINE SPEED</small><b>'+escapeHtml(u.turbine_speed_rpm)+' RPM</b></div><div><small>AVAILABILITY</small><b>'+escapeHtml(u.availability_percent)+'%</b></div></div></article>').join("");
+    const systems=$("nuclear-systems");
+    if(systems)systems.innerHTML=nuclear.systems.map(s=>'<div class="nuclear-system"><i></i><div><b>'+escapeHtml(s.name)+'</b><small>'+escapeHtml(s.detail)+'</small></div><span>'+escapeHtml(s.status)+'</span></div>').join("");
+    drawNuclearTrend(nuclear.trend);
+  }catch(error){console.error("Presentation data:",error)}
+}
+refreshPresentation();setInterval(refreshPresentation,4000);
+
+const presentationToggle=$("presentation-toggle");
+if(presentationToggle){
+  presentationToggle.onclick=()=>{
+    document.body.classList.toggle("presentation-mode");
+    const active=document.body.classList.contains("presentation-mode");
+    presentationToggle.textContent=active?"EXIT PRESENTATION":"PRESENTATION MODE";
+  };
+}
+document.addEventListener("keydown",event=>{
+  if(event.key.toLowerCase()==="p" && !event.ctrlKey && !event.metaKey && !event.altKey){
+    const target=event.target?.tagName?.toLowerCase();
+    if(target!=="input" && target!=="select" && target!=="textarea")presentationToggle?.click();
+  }
+});

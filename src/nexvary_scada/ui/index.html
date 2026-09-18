@@ -30,6 +30,8 @@
   <symbol id="i-protocol" viewBox="0 0 24 24"><path d="M4 7h6l2 3h8M4 17h6l2-3h8"/><circle cx="4" cy="7" r="2"/><circle cx="20" cy="10" r="2"/><circle cx="4" cy="17" r="2"/><circle cx="20" cy="14" r="2"/></symbol>
   <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
   <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></symbol>
+  <symbol id="i-executive" viewBox="0 0 24 24"><path d="M3 20h18M5 17V9h4v8M10 17V4h4v13M15 17v-6h4v6"/><path d="m4 6 5-3 4 2 6-4"/></symbol>
+  <symbol id="i-nuclear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 10c-1.5-5-4.8-7-7-5.7-2.1 1.2-1.4 5 2.3 8.2M14 12c5.1.8 8.5-1 8.5-3.5 0-2.4-3.7-3.7-8-1.5M11 14c-3.7 3.8-3.8 7.7-1.6 8.7 2.2 1 4.8-1.7 5.1-6.2"/></symbol>
 </svg>
 
 <header class="topbar">
@@ -49,7 +51,9 @@
 
 <div class="shell">
   <nav class="sidebar" id="sidebar">
-    <button class="nav accent-blue active" data-page="overview"><span class="nav-icon"><svg><use href="#i-overview"/></svg></span><span data-i18n="overview">Overview</span></button>
+    <button class="nav accent-gold active executive-nav" data-page="executive"><span class="nav-icon"><svg><use href="#i-executive"/></svg></span><span>Executive View / العرض التنفيذي</span></button>
+    <button class="nav accent-purple nuclear-nav" data-page="nuclear"><span class="nav-icon"><svg><use href="#i-nuclear"/></svg></span><span>Nuclear Power / الطاقة النووية</span></button>
+    <button class="nav accent-blue" data-page="overview"><span class="nav-icon"><svg><use href="#i-overview"/></svg></span><span data-i18n="overview">Overview</span></button>
     <button class="nav accent-purple" data-page="hmi"><span class="nav-icon"><svg><use href="#i-hmi"/></svg></span><span data-i18n="hmi">HMI</span></button>
     <button class="nav accent-green" data-page="devices"><span class="nav-icon"><svg><use href="#i-devices"/></svg></span><span data-i18n="devices">Devices</span></button>
     <button class="nav accent-red" data-page="alarms"><span class="nav-icon"><svg><use href="#i-alarms"/></svg></span><span data-i18n="alarms">Alarms</span></button>
@@ -62,7 +66,62 @@
   </nav>
 
   <main>
-    <section class="page active" id="page-overview">
+    <section class="page active" id="page-executive">
+      <div class="demo-banner"><span>EXECUTIVE PRESENTATION MODE / وضع العرض التنفيذي</span><div class="demo-banner-actions"><b>SIMULATION / DEMO DATA</b><button id="presentation-toggle" type="button">PRESENTATION MODE</button></div></div>
+      <div class="executive-hero">
+        <div>
+          <p class="eyebrow">NEXVARY SCADA / EXECUTIVE OVERVIEW</p>
+          <h1>National-Scale Industrial Operations Platform<br><span class="arabic-title">منصة وطنية للعمليات الصناعية</span></h1>
+          <p>One secure operations layer for industrial sites, live telemetry, alarms, history and executive visibility.<br><span class="arabic-copy">طبقة تشغيل موحدة للمواقع الصناعية والبيانات الحية والإنذارات والسجل والرؤية التنفيذية.</span></p>
+        </div>
+        <div class="executive-mark"><span>N</span><small>SCADA</small></div>
+      </div>
+      <div id="executive-kpis" class="executive-kpis"></div>
+      <div class="executive-split">
+        <section class="executive-panel">
+          <div class="executive-panel-head"><span>SECTOR PORTFOLIO / القطاعات</span><b>DEMO</b></div>
+          <div id="executive-sectors" class="sector-grid"></div>
+        </section>
+        <section class="executive-panel">
+          <div class="executive-panel-head"><span>PLATFORM VALUE / قيمة المنصة</span><b>NEXVARY</b></div>
+          <div id="executive-capabilities" class="capability-list"></div>
+        </section>
+      </div>
+      <div class="executive-message">
+        <span class="page-icon gold"><svg><use href="#i-executive"/></svg></span>
+        <div><b>Built for staged deployment / جاهز للتطبيق المرحلي</b><p>Start with simulation and read-only monitoring, commission protocol drivers site by site, then enable controlled operations under explicit role, audit and write-safety policies.</p></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-nuclear">
+      <div class="demo-banner nuclear"><span>NUCLEAR POWER PLANTS / محطات الطاقة النووية</span><b>SIMULATION ONLY</b></div>
+      <div class="page-head">
+        <div class="icon-page-head"><span class="page-icon purple"><svg><use href="#i-nuclear"/></svg></span><div>
+          <p class="eyebrow">POWER GENERATION / NUCLEAR</p>
+          <h1>Nuclear Power Plants <span class="arabic-inline">/ محطات الطاقة النووية</span></h1>
+          <p>Executive and operator visibility for non-safety balance-of-plant, turbine-generator, cooling, auxiliary electrical, grid interface, historian and training.<br><span class="arabic-copy">رؤية تنفيذية وتشغيلية للأنظمة المساندة غير الحرجة والتوربين والمولد والتبريد والطاقة المساعدة والربط بالشبكة والسجل والتدريب.</span></p>
+        </div></div>
+        <div class="nuclear-scope-chip">NON-SAFETY SCOPE</div>
+      </div>
+      <div id="nuclear-headline" class="executive-kpis nuclear-kpis"></div>
+      <div class="nuclear-layout">
+        <section class="executive-panel">
+          <div class="executive-panel-head"><span>GENERATION UNITS / وحدات التوليد</span><b id="nuclear-plant-name">DEMO PLANT</b></div>
+          <div id="nuclear-units" class="unit-grid"></div>
+        </section>
+        <section class="executive-panel">
+          <div class="executive-panel-head"><span>BALANCE-OF-PLANT SYSTEMS / الأنظمة المساندة</span><b>6 SYSTEMS</b></div>
+          <div id="nuclear-systems" class="nuclear-systems"></div>
+        </section>
+      </div>
+      <section class="executive-panel nuclear-trend-panel">
+        <div class="executive-panel-head"><span>GENERATION TREND / اتجاه التوليد</span><b>SIMULATED MW</b></div>
+        <canvas id="nuclear-trend" width="1200" height="260"></canvas>
+      </section>
+      <div class="nuclear-boundary nuclear-page-boundary"><svg><use href="#i-lock"/></svg><div><b>Safety boundary / حدود السلامة</b><p id="nuclear-scope-notice">This demonstration does not implement reactor protection, safety-class I&amp;C, engineered safety actuation or SCRAM.</p></div></div>
+    </section>
+
+    <section class="page" id="page-overview">
       <div class="hero">
         <div><p class="eyebrow">PLANT / OPERATIONS</p><h1 data-i18n="overviewTitle">Operations Overview</h1><p data-i18n="overviewText">Unified live view across configured devices and the built-in process simulator.</p></div>
         <div class="alarm-count"><span id="alarm-count">0</span><small data-i18n="activeAlarms">ACTIVE ALARMS</small></div>
