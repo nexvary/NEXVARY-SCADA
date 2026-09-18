@@ -23,7 +23,35 @@ jobs:
           cache: pip
       - name: Install
         run: python -m pip install -e ".[dev]"
-      - name: Test
+      - name: Compile
+        run: python -m compileall -q src
+      - name: Unit and integration tests
         run: pytest -q
       - name: Import smoke test
         run: python -c "from nexvary_scada.api import app; print(app.title)"
+
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Ruff
+        run: ruff check src tests packaging
+      - name: Bandit
+        run: bandit -q -r src
+
+  release-gate:
+    if: always()
+    needs: [test, static-analysis]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce gate
+        run: |
+          test "${{ needs.test.result }}" = "success"
+          test "${{ needs.static-analysis.result }}" = "success"
+          echo "NEXVARY SCADA Release Gate: PASS"
