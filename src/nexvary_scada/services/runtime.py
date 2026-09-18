@@ -72,6 +72,13 @@ class ScadaRuntime:
         self.poll()
         return result
 
+    def write_simulated(self, tag_id: str, value: object) -> TagValue:
+        """Backward-compatible simulator write used by tests and local demo tooling."""
+        driver = self.manager.driver_for_tag(tag_id)
+        if driver.device.driver != "simulator":
+            raise WriteBlockedError("write_simulated can only target the built-in simulator")
+        return self.write(tag_id, value, operator="local-simulator", role="operator")
+
     def acknowledge_alarm(self, rule_id: str, *, operator: str, role: str):
         if role not in {"operator", "engineer", "admin"}:
             raise WriteBlockedError("Operator role does not permit alarm acknowledgement")
