@@ -1,48 +1,113 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#07090c" />
   <title>NEXVARY SCADA</title>
   <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand"><span class="mark">N</span><div><strong>NEXVARY SCADA</strong><small>Industrial Monitoring &amp; Control Platform</small></div></div>
-    <div class="status"><span class="dot"></span><span id="driver">Connecting…</span><span class="mode">SIMULATION</span></div>
-  </header>
-  <div class="shell">
-    <nav class="sidebar">
-      <button class="nav active">Overview</button><button class="nav">HMI</button><button class="nav">Devices</button>
-      <button class="nav">Alarms</button><button class="nav">Historian</button><button class="nav">Trends</button>
-      <button class="nav">Maintenance</button><button class="nav">Reports</button><button class="nav">Settings</button>
-      <div class="scope">Nuclear profile<br><b>Non-safety monitoring only</b></div>
-    </nav>
-    <main>
-      <section class="hero">
-        <div><p class="eyebrow">PLANT / DEMO PROCESS</p><h1>Operations Overview</h1><p>Live process simulation through the same runtime used by field protocol drivers.</p></div>
-        <div class="alarm-count"><span id="alarm-count">0</span><small>ACTIVE ALARMS</small></div>
-      </section>
+<header class="topbar">
+  <div class="brand"><span class="mark">N</span><div><strong>NEXVARY SCADA</strong><small data-i18n="subtitle">Industrial Monitoring & Control Platform</small></div></div>
+  <div class="top-actions">
+    <select id="locale" aria-label="Language">
+      <option value="en">English</option><option value="ar">العربية</option><option value="tr">Türkçe</option>
+      <option value="es">Español</option><option value="de">Deutsch</option><option value="it">Italiano</option>
+      <option value="fr">Français</option><option value="ur">اردو</option><option value="fa">فارسی</option><option value="ru">Русский</option>
+    </select>
+    <div class="status"><span class="dot"></span><span id="runtime-status">ONLINE</span><span class="mode">SCADA</span></div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" id="sidebar">
+    <button class="nav active" data-page="overview" data-i18n="overview">Overview</button>
+    <button class="nav" data-page="hmi" data-i18n="hmi">HMI</button>
+    <button class="nav" data-page="devices" data-i18n="devices">Devices</button>
+    <button class="nav" data-page="alarms" data-i18n="alarms">Alarms</button>
+    <button class="nav" data-page="historian" data-i18n="historian">Historian</button>
+    <button class="nav" data-page="audit" data-i18n="audit">Audit</button>
+    <button class="nav" data-page="settings" data-i18n="settings">Settings</button>
+    <button class="nav" data-page="about" data-i18n="about">About</button>
+    <div class="scope"><span data-i18n="nuclearScope">Nuclear profile</span><br><b data-i18n="nonSafety">Non-safety monitoring only</b></div>
+  </nav>
+
+  <main>
+    <section class="page active" id="page-overview">
+      <div class="hero">
+        <div><p class="eyebrow">PLANT / OPERATIONS</p><h1 data-i18n="overviewTitle">Operations Overview</h1><p data-i18n="overviewText">Unified live view across configured devices and the built-in process simulator.</p></div>
+        <div class="alarm-count"><span id="alarm-count">0</span><small data-i18n="activeAlarms">ACTIVE ALARMS</small></div>
+      </div>
       <section id="cards" class="cards"></section>
       <section class="grid">
         <div class="panel mimic">
-          <div class="panel-title"><span>PROCESS MIMIC</span><span class="live">LIVE</span></div>
+          <div class="panel-title"><span data-i18n="processMimic">PROCESS MIMIC</span><span class="live">LIVE</span></div>
           <div class="process">
             <div class="tank"><div id="tank-fill" class="tank-fill"></div><span>T-101</span></div>
-            <div class="pipe"></div>
-            <div id="pump" class="pump">P-101</div>
-            <div class="pipe"></div>
-            <div class="outlet">PROCESS</div>
+            <div class="pipe"></div><div id="pump" class="pump">P-101</div><div class="pipe"></div><div class="outlet">PROCESS</div>
           </div>
-          <div class="controls"><button id="toggle-pump">START / STOP PUMP</button><button id="fault-pump" class="danger">TOGGLE FAULT</button><button id="estop" class="danger">E-STOP</button></div>
+          <div class="controls">
+            <button id="toggle-pump" data-i18n="startStop">START / STOP PUMP</button>
+            <button id="fault-pump" class="danger" data-i18n="toggleFault">TOGGLE FAULT</button>
+            <button id="estop" class="danger">E-STOP</button>
+          </div>
         </div>
         <div class="panel">
-          <div class="panel-title"><span>ALARM CONSOLE</span><span>PRIORITY</span></div>
-          <div id="alarms" class="alarms"></div>
+          <div class="panel-title"><span data-i18n="alarmConsole">ALARM CONSOLE</span><span>PRIORITY</span></div>
+          <div id="overview-alarms" class="alarms"></div>
         </div>
       </section>
-    </main>
-  </div>
-  <script src="/static/app.js"></script>
+    </section>
+
+    <section class="page" id="page-hmi">
+      <div class="page-head"><div><p class="eyebrow">HMI</p><h1 data-i18n="hmi">HMI</h1><p data-i18n="hmiText">Live tag workspace with quality, units and device source.</p></div></div>
+      <div id="tag-table" class="table-wrap"></div>
+    </section>
+
+    <section class="page" id="page-devices">
+      <div class="page-head"><div><p class="eyebrow">DEVICE CENTER</p><h1 data-i18n="devices">Devices</h1><p data-i18n="devicesText">Configured drivers, health and write policy.</p></div></div>
+      <div id="device-grid" class="device-grid"></div>
+    </section>
+
+    <section class="page" id="page-alarms">
+      <div class="page-head"><div><p class="eyebrow">EVENT MANAGEMENT</p><h1 data-i18n="alarms">Alarms</h1><p data-i18n="alarmsText">Active and cleared events with operator acknowledgement.</p></div></div>
+      <div id="alarm-table" class="table-wrap"></div>
+    </section>
+
+    <section class="page" id="page-historian">
+      <div class="page-head"><div><p class="eyebrow">HISTORIAN</p><h1 data-i18n="historian">Historian</h1><p data-i18n="historianText">Select a numeric tag to inspect recent recorded samples.</p></div>
+      <div class="inline"><select id="trend-tag"></select><select id="trend-window"><option value="15">15 min</option><option value="60" selected>60 min</option><option value="360">6 h</option></select></div></div>
+      <div class="panel chart-panel"><canvas id="trend-canvas" width="1100" height="360"></canvas><div id="trend-empty" class="empty"></div></div>
+    </section>
+
+    <section class="page" id="page-audit">
+      <div class="page-head"><div><p class="eyebrow">ACCOUNTABILITY</p><h1 data-i18n="audit">Audit</h1><p data-i18n="auditText">Operator writes, denied actions and alarm acknowledgements.</p></div></div>
+      <div id="audit-table" class="table-wrap"></div>
+    </section>
+
+    <section class="page" id="page-settings">
+      <div class="page-head"><div><p class="eyebrow">LOCAL SESSION</p><h1 data-i18n="settings">Settings</h1></div></div>
+      <div class="settings-grid">
+        <label><span data-i18n="operator">Operator</span><input id="operator" value="local-operator" /></label>
+        <label><span data-i18n="role">Role</span><select id="role"><option value="viewer">Viewer</option><option value="operator">Operator</option><option value="engineer">Engineer</option><option value="admin">Admin</option></select></label>
+      </div>
+      <div class="notice"><b data-i18n="writeSafety">Write safety:</b> <span data-i18n="writeSafetyText">Real-device writes remain blocked by the server kill-switch even when this screen selects an operator role.</span></div>
+    </section>
+
+    <section class="page" id="page-about">
+      <div class="page-head"><div><p class="eyebrow">NEXVARY</p><h1 data-i18n="about">About</h1><p>NEXVARY SCADA — Industrial Monitoring &amp; Control Platform</p></div></div>
+      <div class="about-card">
+        <p><b>Website</b> <a href="https://nexvary.com/" target="_blank" rel="noreferrer">nexvary.com</a></p>
+        <p><b>Email</b> <a href="mailto:info@nexvary.com">info@nexvary.com</a></p>
+        <p><b>YouTube</b> <a href="https://www.youtube.com/@NexvaryInc" target="_blank" rel="noreferrer">@NexvaryInc</a></p>
+        <p><b>X</b> <a href="https://x.com/Nexvary" target="_blank" rel="noreferrer">@Nexvary</a></p>
+        <p><b>Facebook</b> <a href="https://www.facebook.com/share/14p9krEn5ij/" target="_blank" rel="noreferrer">NEXVARY</a></p>
+        <hr><p class="muted" data-i18n="nuclearNotice">Nuclear support is restricted to non-safety monitoring, simulation, training, historian, maintenance and auxiliary systems.</p>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="/static/app.js"></script>
 </body>
 </html>
