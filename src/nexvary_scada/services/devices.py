@@ -6,6 +6,7 @@ from pathlib import Path
 
 from nexvary_scada.drivers.base import DriverError, IndustrialDriver
 from nexvary_scada.drivers.modbus_tcp import ModbusTagSpec, ModbusTcpDriver
+from nexvary_scada.drivers.modbus_rtu import ModbusRtuDriver
 from nexvary_scada.drivers.simulator import ProcessSimulator
 from nexvary_scada.models import TagDefinition, TagValue
 
@@ -63,17 +64,18 @@ class DeviceManager:
         if payload.get("include_simulator", True):
             drivers.append(ProcessSimulator())
         for item in payload.get("devices", []):
-            if item.get("driver") != "modbus_tcp":
-                continue
             tags = [ModbusTagSpec(**tag) for tag in item.get("tags", [])]
-            drivers.append(ModbusTcpDriver(
-                device_id=item["id"],
-                name=item.get("name", item["id"]),
-                host=item["host"],
-                port=item.get("port", 502),
-                unit_id=item.get("unit_id", 1),
-                timeout=item.get("timeout", 2.0),
-                writes_enabled=item.get("writes_enabled", False),
-                tags=tags,
-            ))
+            if item.get("driver") == "modbus_tcp":
+                drivers.append(ModbusTcpDriver(
+                    device_id=item["id"], name=item.get("name", item["id"]), host=item["host"],
+                    port=item.get("port", 502), unit_id=item.get("unit_id", 1),
+                    timeout=item.get("timeout", 2.0), writes_enabled=item.get("writes_enabled", False), tags=tags,
+                ))
+            elif item.get("driver") == "modbus_rtu":
+                drivers.append(ModbusRtuDriver(
+                    device_id=item["id"], name=item.get("name", item["id"]), port=item["port"],
+                    unit_id=item.get("unit_id", 1), baudrate=item.get("baudrate", 9600),
+                    parity=item.get("parity", "N"), stopbits=item.get("stopbits", 1),
+                    timeout=item.get("timeout", 1.0), writes_enabled=item.get("writes_enabled", False), tags=tags,
+                ))
         return cls(drivers)
