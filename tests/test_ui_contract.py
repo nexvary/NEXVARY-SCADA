@@ -6,7 +6,7 @@ UI = Path("src/nexvary_scada/ui")
 def test_ui_has_distinct_connected_pages_and_rtl_locales():
     html = (UI / "index.html").read_text(encoding="utf-8")
     js = (UI / "app.js").read_text(encoding="utf-8")
-    for page in ("overview", "hmi", "devices", "alarms", "historian", "audit", "settings", "about-us", "system-info"):
+    for page in ("executive", "nuclear", "overview", "hmi", "devices", "alarms", "historian", "audit", "settings", "about-us", "system-info"):
         assert f'id="page-{page}"' in html
         assert f'data-page="{page}"' in html
     assert '["ar","ur","fa"]' in js
@@ -35,3 +35,13 @@ def test_ui_contains_vector_icon_system_and_system_information_page():
     assert "Modbus RTU/RS-485" in html
     assert "Milestone 150" in html
     assert "Nuclear safety boundary" in html
+
+
+def test_executive_and_nuclear_demo_surfaces_are_connected():
+    html = (UI / "index.html").read_text(encoding="utf-8")
+    js = (UI / "app.js").read_text(encoding="utf-8")
+    assert 'SIMULATION / DEMO DATA' in html
+    assert 'SIMULATION ONLY' in html
+    assert '/api/executive' in js
+    assert '/api/nuclear' in js
+    assert 'id="nuclear-trend"' in html
