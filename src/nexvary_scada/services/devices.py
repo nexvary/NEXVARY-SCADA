@@ -19,6 +19,11 @@ class DeviceManager:
     def add(self, driver: IndustrialDriver) -> None:
         if driver.device.id in self._drivers:
             raise ValueError(f"Duplicate device id: {driver.device.id}")
+        existing_tags = {tag.id for item in self._drivers.values() for tag in item.definitions()}
+        incoming_tags = {tag.id for tag in driver.definitions()}
+        duplicates = existing_tags & incoming_tags
+        if duplicates:
+            raise ValueError(f"Duplicate tag ids across devices: {sorted(duplicates)}")
         self._drivers[driver.device.id] = driver
 
     def devices(self) -> list[dict]:
@@ -35,6 +40,12 @@ class DeviceManager:
     def definitions(self) -> list[TagDefinition]:
         return [tag for driver in self._drivers.values() for tag in driver.definitions()]
 
+    def driver_for_tag(self, tag_id: str) -> IndustrialDriver:
+        for driver in self._drivers.values():
+            if any(tag.id == tag_id for tag in driver.definitions()):
+                return driver
+        raise DriverError(f"Unknown tag: {tag_id}")
+
     def read_all(self) -> list[TagValue]:
         values: list[TagValue] = []
         for driver in self._drivers.values():
@@ -43,16 +54,7 @@ class DeviceManager:
         return values
 
     def write(self, tag_id: str, value: object) -> TagValue:
-        matches = [
-            driver
-            for driver in self._drivers.values()
-            if any(tag.id == tag_id for tag in driver.definitions())
-        ]
-        if not matches:
-            raise DriverError(f"Unknown tag: {tag_id}")
-        if len(matches) > 1:
-            raise DriverError(f"Tag id is ambiguous across devices: {tag_id}")
-        return matches[0].write(tag_id, value)
+        return self.driver_for_tag(tag_id).write(tag_id, value)
 
     @classmethod
     def from_json(cls, path: str | Path) -> "DeviceManager":
