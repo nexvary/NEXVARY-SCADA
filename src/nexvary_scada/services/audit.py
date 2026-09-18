@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -37,7 +37,7 @@ class AuditLog:
         success: bool,
         detail: dict[str, Any] | None = None,
     ) -> None:
-        timestamp = datetime.now(timezone.utc).isoformat()
+        timestamp = datetime.now(UTC).isoformat()
         self.connection.execute(
             "INSERT INTO audit_log(timestamp, operator, role, action, target, success, detail_json) VALUES (?, ?, ?, ?, ?, ?, ?)",
             (timestamp, operator, role, action, target, int(success), json.dumps(detail or {}, ensure_ascii=False)),

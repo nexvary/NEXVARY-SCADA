@@ -5,8 +5,8 @@ from dataclasses import asdict
 from pathlib import Path
 
 from nexvary_scada.drivers.base import DriverError, IndustrialDriver
-from nexvary_scada.drivers.modbus_tcp import ModbusTagSpec, ModbusTcpDriver
 from nexvary_scada.drivers.modbus_rtu import ModbusRtuDriver
+from nexvary_scada.drivers.modbus_tcp import ModbusTagSpec, ModbusTcpDriver
 from nexvary_scada.drivers.simulator import ProcessSimulator
 from nexvary_scada.models import TagDefinition, TagValue
 
@@ -58,7 +58,7 @@ class DeviceManager:
         return self.driver_for_tag(tag_id).write(tag_id, value)
 
     @classmethod
-    def from_json(cls, path: str | Path) -> "DeviceManager":
+    def from_json(cls, path: str | Path) -> DeviceManager:
         payload = json.loads(Path(path).read_text(encoding="utf-8"))
         drivers: list[IndustrialDriver] = []
         if payload.get("include_simulator", True):

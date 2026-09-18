@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 UI = Path("src/nexvary_scada/ui")
 
 

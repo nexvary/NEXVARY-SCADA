@@ -1,10 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
+from pathlib import Path
+
+ROOT = Path(SPECPATH).parent
 
 a = Analysis(
-    ["packaging/launcher.py"],
-    pathex=["src"],
+    [str(ROOT / "packaging" / "launcher.py")],
+    pathex=[str(ROOT / "src")],
     binaries=[],
-    datas=[("src/nexvary_scada/ui", "nexvary_scada/ui")],
+    datas=[(str(ROOT / "src" / "nexvary_scada" / "ui"), "nexvary_scada/ui")],
     hiddenimports=[
         "uvicorn.logging",
         "uvicorn.loops.auto",

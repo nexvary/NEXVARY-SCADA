@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from nexvary_scada.models import AlarmEvent, AlarmRule, Compare, TagValue
 
@@ -30,7 +30,7 @@ class AlarmEngine:
 
     def evaluate(self, values: list[TagValue]) -> list[AlarmEvent]:
         by_tag = {item.tag_id: item for item in values}
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         for rule in self.rules:
             current = by_tag.get(rule.tag_id)
             if current is None:
@@ -68,7 +68,7 @@ class AlarmEngine:
             raise KeyError(rule_id)
         event.acknowledged = True
         event.acknowledged_by = operator
-        event.acknowledged_at = datetime.now(timezone.utc)
+        event.acknowledged_at = datetime.now(UTC)
         return event
 
     def events(self, *, active_only: bool = False) -> list[AlarmEvent]:

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from nexvary_scada.models import TagValue
@@ -55,7 +55,7 @@ class Historian:
         return [self._row(row) for row in rows]
 
     def window(self, tag_id: str, *, minutes: int = 60, limit: int = 1000) -> list[dict]:
-        since = (datetime.now(timezone.utc) - timedelta(minutes=max(1, minutes))).isoformat()
+        since = (datetime.now(UTC) - timedelta(minutes=max(1, minutes))).isoformat()
         rows = self.connection.execute(
             """
             SELECT tag_id, device_id, value_json, quality, timestamp

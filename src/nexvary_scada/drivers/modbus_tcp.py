@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-import socket
-import struct
+from collections.abc import Iterable
 from dataclasses import dataclass
 from itertools import count
-from typing import Iterable
+import socket
+import struct
 
 from nexvary_scada.drivers.base import DriverError, DriverHealth, IndustrialDriver, WriteBlockedError
 from nexvary_scada.models import DeviceDefinition, Quality, TagDefinition, TagValue
